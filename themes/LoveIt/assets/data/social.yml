@@ -422,13 +422,7 @@ vine:
   Icon:
     Class: fab fa-vine fa-fw
 
-# 054: Google Scholar
-googlescholar:
-  Weight: 54
-  Template: https://scholar.google.com/citations?%v
-  Title: Google Scholar
-  Icon:
-    Simpleicons: googlescholar
+
 
 # 055: ResearchGate
 researchgate:
@@ -515,6 +509,14 @@ lichess:
   Title: Lichess
   Icon:
     Simpleicons: lichess
+
+# 054: Google Scholar
+googlescholar:
+  Weight: 65
+  Template: https://scholar.google.com/citations?%v
+  Title: Google Scholar
+  Icon:
+    Src: svg/icons/google-scholar.svg
 
 # 066: ORCID
 orcid:
