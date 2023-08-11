@@ -4,7 +4,32 @@
         <link>https://stevenrossi.github.io/</link>
         <description>Steven Rossi</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>stevenrossi@gmail.com (Steven Rossi)</managingEditor>
-            <webMaster>stevenrossi@gmail.com (Steven Rossi)</webMaster>
+            <webMaster>stevenrossi@gmail.com (Steven Rossi)</webMaster><lastBuildDate>Fri, 28 Jul 2023 23:12:51 -0700</lastBuildDate>
             <atom:link href="https://stevenrossi.github.io/index.xml" rel="self" type="application/rss+xml" />
-        </channel>
+        <item>
+    <title>Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL</title>
+    <link>https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/</link>
+    <pubDate>Fri, 28 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/</guid>
+    <description><![CDATA[My goal with this project was to develop a Formula 1 visualizer that analysed relatively basic data over a broad time scale, without getting into the more detailed data (e.g., lap-specific times, telemetry) that has become more readily available in recent years.
+In Formula 1 there are well known difficulties in comparing the relative performance of drivers given that drivers compete in machinery of varying quality, i.e., did driver A finish ahead of driver B because he is a better driver or because he was driving a faster car?]]></description>
+</item>
+<item>
+    <title>Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions</title>
+    <link>https://stevenrossi.github.io/posts/2-le_mans_2023/</link>
+    <pubDate>Mon, 24 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/posts/2-le_mans_2023/</guid>
+    <description><![CDATA[The 2023 24 hours of Le Mans was an historic edition of the legendary endurance race, not only because it marked the 100 year anniversary from the first running, but also because it featured the return of a number of hallowed car manufacturers to the top flight of sports car racing. In this project I aim to make a basic visualization of the distance travelled by each car in the 2023 edition of Le Mans.]]></description>
+</item>
+<item>
+    <title>Visualizing the age distribution of Women&#39;s World Cup squads using R</title>
+    <link>https://stevenrossi.github.io/posts/1-wwc/</link>
+    <pubDate>Fri, 21 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/posts/1-wwc/</guid>
+    <description><![CDATA[With the 2023 FIFA Women&rsquo;s World Cup kicking off today in Australia and New Zealand, I thought I would try to visualize some statistics for all of the participating players. Detailed data on the women&rsquo;s game is not as readily available as data on the men&rsquo;s game, so my focus is on some basic statistics for which data is likely to be available (e.g., player age, caps, goals, assists, etc.).]]></description>
+</item>
+</channel>
 </rss>

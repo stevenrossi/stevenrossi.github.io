@@ -1,7 +1,7 @@
 ---
 title: Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions
 date: 2023-07-24T23:12:51-07:00
-draft: true
+draft: false
 tags: [R, Motorsports, Data Scraping, Visualization]
 ---
 

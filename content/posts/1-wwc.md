@@ -1,7 +1,7 @@
 ---
 title: Visualizing the age distribution of Women's World Cup squads using R
 date: 2023-07-21T23:12:51-07:00
-draft: true
+draft: false
 tags: [R, Football, Data Scraping, Visualization]
 output:
   html_document:

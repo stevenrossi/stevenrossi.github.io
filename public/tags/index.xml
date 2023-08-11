@@ -4,5 +4,69 @@
         <link>https://stevenrossi.github.io/tags/</link>
         <description>Tags - Tag - Steven Rossi</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>stevenrossi@gmail.com (Steven Rossi)</managingEditor>
-            <webMaster>stevenrossi@gmail.com (Steven Rossi)</webMaster><atom:link href="https://stevenrossi.github.io/tags/" rel="self" type="application/rss+xml" /></channel>
+            <webMaster>stevenrossi@gmail.com (Steven Rossi)</webMaster><lastBuildDate>Fri, 28 Jul 2023 23:12:51 -0700</lastBuildDate><atom:link href="https://stevenrossi.github.io/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>Ergast</title>
+    <link>https://stevenrossi.github.io/tags/ergast/</link>
+    <pubDate>Fri, 28 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/ergast/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Formula 1</title>
+    <link>https://stevenrossi.github.io/tags/formula-1/</link>
+    <pubDate>Fri, 28 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/formula-1/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Motorsports</title>
+    <link>https://stevenrossi.github.io/tags/motorsports/</link>
+    <pubDate>Fri, 28 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/motorsports/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>SQL</title>
+    <link>https://stevenrossi.github.io/tags/sql/</link>
+    <pubDate>Fri, 28 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/sql/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Data Scraping</title>
+    <link>https://stevenrossi.github.io/tags/data-scraping/</link>
+    <pubDate>Mon, 24 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/data-scraping/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>R</title>
+    <link>https://stevenrossi.github.io/tags/r/</link>
+    <pubDate>Mon, 24 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/r/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Visualization</title>
+    <link>https://stevenrossi.github.io/tags/visualization/</link>
+    <pubDate>Mon, 24 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/visualization/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Football</title>
+    <link>https://stevenrossi.github.io/tags/football/</link>
+    <pubDate>Fri, 21 Jul 2023 23:12:51 -0700</pubDate>
+    <author>Steven Rossi</author>
+    <guid>https://stevenrossi.github.io/tags/football/</guid>
+    <description><![CDATA[]]></description>
+</item>
+</channel>
 </rss>
