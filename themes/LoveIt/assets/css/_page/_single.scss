@@ -1,5 +1,3 @@
-@import "../_partial/_single/toc";
-
 .single {
   .single-title {
     margin: 2rem 0 .5rem;
@@ -52,7 +50,6 @@
 
   .content {
     > h2 {
-      font-size: 1.5rem;
 
       & code {
         font-size: 1.25rem;
@@ -89,7 +86,6 @@
     h5,
     h6 {
       font-weight: bold;
-      margin: 1.2rem 0;
 
       [theme=dark] & {
         font-weight: bolder;
@@ -113,7 +109,7 @@
     }
 
     > h2 > .header-mark::before {
-      content: "#";
+      content: "•";
     }
 
     p {
@@ -181,7 +177,8 @@
       > table {
         width: 100%;
         max-width: 100%;
-        margin: .625rem 0;
+        margin-bottom: 0px;
+        margin-top: 0px;
         border-spacing: 0;
         background: $table-background-color;
         border-collapse: collapse;
@@ -237,14 +234,6 @@
       }
     }
 
-    .lazyload, .lazyloading {
-      @include object-fit(scale-down);
-    }
-
-    .lazyloaded {
-      @include object-fit(fill);
-    }
-
     blockquote {
       display: block;
       border-left: .5rem solid $blockquote-color;
@@ -281,11 +270,11 @@
     hr {
       margin: 1rem 0;
       position: relative;
-      border-top: 1px dashed $global-border-color;
+      border-top: 1px solid $global-border-color;
       border-bottom: none;
 
       [theme=dark] & {
-        border-top: 1px dashed $global-border-color-dark;
+        border-top: 1px solid #a9a9b3;
       }
     }
 
@@ -298,7 +287,7 @@
       @include border-radius(3px);
       @include box-shadow(inset 0 -1px 0 $global-border-color);
       font-size: .8rem;
-      font-family: $code-font-family;
+      font-family: var(--code-font-family);
       color: $code-color;
 
       [theme=dark] & {
@@ -314,6 +303,16 @@
       height: 1.25em;
       vertical-align: text-bottom;
     }
+
+    .person-mention.h-card {
+      display: inline-block;
+      img {
+        vertical-align: -12%;
+        max-height: 1.1em;
+        margin-right: 0ex;
+        border-radius: 50%;
+      }
+    }
   }
 
   @import "../_partial/_single/footer";
@@ -324,16 +323,16 @@
   .highlight {
     padding: .375rem;
     font-size: .875rem;
-    font-family: $code-font-family;
+    font-family: var(--code-font-family);
     font-weight: bold;
     word-break: break-all;
     white-space: pre-wrap;
   }
 
-  --ti-cursor-font-family: $global-font-family;
-  --ti-cursor-font-size: $global-font-size;
-  --ti-cursor-font-weight: $global-font-weight;
-  --ti-cursor-line-height: $global-line-height;
+  --ti-cursor-font-family: var(--global-font-family);
+  --ti-cursor-font-size: var(--global-font-size);
+  --ti-cursor-font-weight: var(--global-font-weight);
+  --ti-cursor-line-height: var(--global-line-height);
   --ti-cursor-color: $global-font-secondary-color;
   --ti-cursor-margin-left: 0;
 

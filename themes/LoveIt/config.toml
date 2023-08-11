@@ -6,10 +6,10 @@
 [params]
   # site default theme ["auto", "light", "dark"]
   # 网站默认主题 ["auto", "light", "dark"]
-  defaultTheme = "auto"
+  defaultTheme = "dark"
   # public git repo url only then enableGitInfo is true
   # 公共 git 仓库路径，仅在 enableGitInfo 设为 true 时有效
-  gitRepo = ""
+  gitRepo = "http://github.com/stevenrossi/stevenrossi.github.io"
   # which hash function used for SRI, when empty, no SRI is used
   # ["sha256", "sha384", "sha512", "md5"]
   # 哪种哈希函数用来 SRI, 为空时表示不使用 SRI
@@ -20,10 +20,10 @@
   dateFormat = "2006-01-02"
   # website title for Open Graph and Twitter Cards
   # 网站标题, 用于 Open Graph 和 Twitter Cards
-  title = "My cool site"
+  title = "Steven Rossi"
   # website description for RSS, SEO, Open Graph and Twitter Cards
   # 网站描述, 用于 RSS, SEO, Open Graph 和 Twitter Cards
-  description = "This is my cool site"
+  description = ""
   # website images for Open Graph and Twitter Cards
   # 网站图片, 用于 Open Graph 和 Twitter Cards
   images = []
@@ -45,7 +45,7 @@
       logo = ""
       # title name
       # 标题名称
-      name = "My cool site"
+      name = "Steven Rossi"
       # you can add extra information before the name (HTML format is supported), such as icons
       # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
       pre = ""
@@ -65,7 +65,7 @@
     custom = ""
     # whether to show Hugo and theme info
     # 是否显示 Hugo 和主题信息
-    hugo = true
+    hugo = false
     # whether to show copyright info
     # 是否显示版权信息
     copyright = true
@@ -74,7 +74,7 @@
     author = true
     # site creation time
     # 网站创立年份
-    since = 2022
+    since = 2023
     # ICP info only in China (HTML format is supported)
     # ICP 备案信息，仅在中国使用 (支持 HTML 格式)
     icp = ""
@@ -113,7 +113,7 @@
   [params.app]
     # optional site title override for the app when added to an iOS home screen or Android launcher
     # 当添加到 iOS 主屏幕或者 Android 启动器时的标题, 覆盖默认标题
-    title = "My cool site"
+    title = "Steven Rossi"
     # whether to omit favicon resource links
     # 是否隐藏网站图标资源链接
     noFavicon = false
@@ -175,13 +175,13 @@
       gravatarEmail = ""
       # URL of avatar shown in home page
       # 主页显示头像的 URL
-      avatarURL = ""
+      avatarURL = "/pfp.png"
       # title shown in home page (HTML format is supported)
       # 主页显示的网站标题 (支持 HTML 格式)
       title = ""
-      # subtitle shown in home page
-      # 主页显示的网站副标题
-      subtitle = "This is my cool site"
+      # subtitle shown in home page (HTML format is supported)
+      # 主页显示的网站副标题 (允许 HTML 格式)
+      subtitle = ""
       # whether to use typeit animation for subtitle
       # 是否为副标题显示打字机动画
       typeit = true
@@ -263,7 +263,18 @@
     XMPP = ""
     Matrix = ""
     Bilibili = ""
+    Discord = ""
+    DiscordInvite = ""
+    Lichess = ""
+    ORCID = ""
+    Pleroma = ""
+    Kaggle = ""
+    MediaWiki= ""
+    Plume = ""
+    HackTheBox = ""
+    RootMe= ""
     Email = ""
+    Phone = ""
     RSS = ""
 
   # Page global config
@@ -301,7 +312,7 @@
     [params.page.toc]
       # whether to enable the table of the contents
       # 是否使用目录
-      enable = true
+      enable = false
       # whether to keep the static table of the contents in front of the post
       # 是否保持使用文章前面的静态目录
       keepStatic = false
@@ -316,7 +327,7 @@
       copy = true
       # the maximum number of lines of displayed code by default
       # 默认展开显示的代码行数
-      maxShownLines = 50
+      maxShownLines = -1
     # KaTeX mathematical formulas config (KaTeX https://katex.org/)
     # KaTeX 数学公式配置 (KaTeX https://katex.org/)
     [params.page.math]
@@ -366,7 +377,7 @@
       Twitter = true
       Facebook = true
       Linkedin = false
-      Whatsapp = false
+      Whatsapp = true
       Pinterest = false
       Tumblr = false
       HackerNews = true
@@ -374,7 +385,7 @@
       VK = false
       Buffer = false
       Xing = false
-      Line = true
+      Line = false
       Instapaper = false
       Pocket = false
       Flipboard = false
@@ -415,6 +426,8 @@
         avatar = "mp"
         meta= ""
         pageSize = 10
+        # automatically adapt the current theme i18n configuration when empty
+        # 为空时自动适配当前主题 i18n 配置
         lang = ""
         visitor = true
         recordIP = true
@@ -423,14 +436,14 @@
         serverURLs = ""
         # emoji data file name, default is "google.yml"
         # ["apple.yml", "google.yml", "facebook.yml", "twitter.yml"]
-        # located in "themes/LoveIt/assets/data/emoji/" directory
+        # located in "themes/LoveIt/assets/lib/valine/emoji/" directory
         # you can store your own data files in the same path under your project:
-        # "assets/data/emoji/"
+        # "assets/lib/valine/emoji/"
         # emoji 数据文件名称, 默认是 "google.yml"
         # ["apple.yml", "google.yml", "facebook.yml", "twitter.yml"]
-        # 位于 "themes/LoveIt/assets/data/emoji/" 目录
+        # 位于 "themes/LoveIt/assets/lib/valine/emoji/" 目录
         # 可以在你的项目下相同路径存放你自己的数据文件:
-        # "assets/data/emoji/"
+        # "assets/lib/valine/emoji/"
         emoji = ""
       # Facebook comment config (https://developers.facebook.com/docs/plugins/comments)
       # Facebook 评论系统设置 (https://developers.facebook.com/docs/plugins/comments)
@@ -439,6 +452,8 @@
         width = "100%"
         numPosts = 10
         appId = ""
+        # automatically adapt the current theme i18n configuration when empty
+        # 为空时自动适配当前主题 i18n 配置
         languageCode = ""
       # Telegram comments config (https://comments.app/)
       # Telegram comments 评论系统设置 (https://comments.app/)
@@ -455,8 +470,8 @@
       # Commento comment 评论系统设置 (https://commento.io/)
       [params.page.comment.commento]
         enable = false
-      # Utterances comment config (https://utteranc.es/)
-      # Utterances comment 评论系统设置 (https://utteranc.es/)
+      # utterances comment config (https://utteranc.es/)
+      # utterances comment 评论系统设置 (https://utteranc.es/)
       [params.page.comment.utterances]
         enable = false
         # owner/repo
@@ -465,6 +480,26 @@
         label = ""
         lightTheme = "github-light"
         darkTheme = "github-dark"
+      # giscus comment config (https://giscus.app/)
+      # giscus comment 评论系统设置 (https://giscus.app/zh-CN)
+      [params.page.comment.giscus]
+        # You can refer to the official documentation of giscus to use the following configuration.
+        # 你可以参考官方文档来使用下列配置
+        enable = false
+        repo = ""
+        repoId = ""
+        category = "Announcements"
+        categoryId = ""
+        # automatically adapt the current theme i18n configuration when empty
+        # 为空时自动适配当前主题 i18n 配置
+        lang = ""
+        mapping = "pathname"
+        reactionsEnabled = "1"
+        emitMetadata = "0"
+        inputPosition = "bottom"
+        lazyLoading = false
+        lightTheme = "light"
+        darkTheme = "dark"
     # Third-party library config
     # 第三方库配置
     [params.page.library]
@@ -531,7 +566,7 @@
     enable = false
     # Google Analytics
     [params.analytics.google]
-      id = ""
+      id = "G-4RKC904JE1"
       # whether to anonymize IP
       # 是否匿名化用户 IP
       anonymizeIP = true
@@ -541,6 +576,12 @@
       # server url for your tracker if you're self hosting
       # 自行托管追踪器时的主机路径
       server = ""
+    # Plausible Analytics
+    [params.analytics.plausible]
+      dataDomain = ""
+    # Yandex Metrica
+    [params.analytics.yandexMetrica]
+      id = ""
 
   # Cookie consent config
   # Cookie 许可配置
@@ -577,3 +618,8 @@
     # whether to use object-fit-images to be compatible with older browsers
     # 是否使用 object-fit-images 来兼容旧式浏览器
     objectFit = false
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
