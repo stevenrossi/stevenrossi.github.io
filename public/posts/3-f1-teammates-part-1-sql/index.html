@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL - Steven Rossi</title><meta name="Description" content="Steven Rossi"><meta property="og:title" content="Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL" />
+<meta property="og:description" content="My goal with this project was to develop a Formula 1 visualizer that analysed relatively basic data over a broad time scale, without getting into the more detailed data (e.g., lap-specific times, telemetry) that has become more readily available in recent years.
+In Formula 1 there are well known difficulties in comparing the relative performance of drivers given that drivers compete in machinery of varying quality, i.e., did driver A finish ahead of driver B because he is a better driver or because he was driving a faster car?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-07-28T23:12:51-07:00" />
+<meta property="article:modified_time" content="2023-07-28T23:12:51-07:00" /><meta property="og:site_name" content="Steven Rossi" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL"/>
+<meta name="twitter:description" content="My goal with this project was to develop a Formula 1 visualizer that analysed relatively basic data over a broad time scale, without getting into the more detailed data (e.g., lap-specific times, telemetry) that has become more readily available in recent years.
+In Formula 1 there are well known difficulties in comparing the relative performance of drivers given that drivers compete in machinery of varying quality, i.e., did driver A finish ahead of driver B because he is a better driver or because he was driving a faster car?"/>
+<meta name="application-name" content="Steven Rossi">
+<meta name="apple-mobile-web-app-title" content="Steven Rossi"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" /><link rel="prev" href="https://stevenrossi.github.io/posts/2-le_mans_2023/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/stevenrossi.github.io\/posts\/3-f1-teammates-part-1-sql\/"
+        },"genre": "posts","keywords": "SQL, Motorsports, Formula 1, Ergast","wordcount":  783 ,
+        "url": "https:\/\/stevenrossi.github.io\/posts\/3-f1-teammates-part-1-sql\/","datePublished": "2023-07-28T23:12:51-07:00","dateModified": "2023-07-28T23:12:51-07:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Steven Rossi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Steven Rossi">Steven Rossi</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/about/"> About </a><a class="menu-item" href="/viz/"> Interactive Tools </a><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Steven Rossi">Steven Rossi</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/about/" title="">About</a><a class="menu-item" href="/viz/" title="">Interactive Tools</a><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Steven Rossi</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-07-28">2023-07-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;783 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="content" id="content"><p>My goal with this project was to develop a <a href="https://stevenrossi.shinyapps.io/f1-teammates/" target="_blank" rel="noopener noreffer ">Formula 1 visualizer</a> that analysed relatively basic data over a broad time scale, without getting into the more detailed data (e.g., lap-specific times, telemetry) that has become more readily available in recent years.</p>
+<p>In Formula 1 there are well known difficulties in comparing the relative performance of drivers given that drivers compete in machinery of varying quality, i.e., did driver A finish ahead of driver B because he is a better driver or because he was driving a faster car? As such, the only fair comparison that can be made in races without controlling for a number of complex factors is between teammates, who (typically) compete in identical cars. I therefore sought to develop an analysis that only compared the performance of teammates to one another.</p>
+<p>In this post I will review how I pulled the necessary data for this project and in follow-up posts I will detail some data manipulation using <code>dplyr</code> in R and the contruction of a <a href="https://stevenrossi.shinyapps.io/f1-teammates/" target="_blank" rel="noopener noreffer ">Shiny app</a>. For now, I only focus on the performance of teammates against each other in Grand Prix races, though in the future I&rsquo;d like to add comparisons from qualifying, and less importantly, from sprint races.</p>
+<p>The <a href="http://ergast.com/mrd/" target="_blank" rel="noopener noreffer ">Ergast Developer API</a> hosts a large Formula 1 dataset that can be used for a variety of purposes.  The dataset includes results from each race and information on drivers, constructors, and circuits from the beginning of the world championships in 1950 to the present day. Other, more detailed but less complete data is also contained in the dataset, such as lap times and pit stop durations. The data can be downloaded several ways, including via API and as a set of <a href="http://ergast.com/downloads/f1db_csv.zip" target="_blank" rel="noopener noreffer ">.csv files</a>. In this post, I&rsquo;ll review retrieving the data from a MySQL database image, which can be downloaded <a href="http://ergast.com/downloads/f1db.sql.gz" target="_blank" rel="noopener noreffer ">here</a>.</p>
+<p>In order to compare the relative performance of two teammates on race day, we&rsquo;ll need their finishing position in each race. The Egast Database contains <a href="http://ergast.com/images/ergast_db.png" target="_blank" rel="noopener noreffer ">14 tables</a>, one of which, named <code>results</code>, appears to contain the finishing order (or, <code>positionOrder</code>) in each race:</p>
+<br>
+<p><a href="/images/post3/ergast_db.png" rel=""><img src="/images/post3/ergast_db.png"></a></p>
+<br>
+<p>The <code>raceId</code>, <code>driverId</code>, and <code>constructorId</code> columns in <code>results</code> are linked to the <code>races</code>, <code>drivers</code>, and <code>constructors</code> tables, respectively. These tables should contain everything we&rsquo;ll need for the teammate comparison dataset. Let&rsquo;s give the <code>results</code>, <code>races</code>, and <code>drivers</code> tables the aliases <code>r</code>, <code>a</code>, <code>d</code>, and <code>c</code> respectively.</p>
+<p>We construct our dataset with the following SQL code:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">driverId</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">r</span><span class="p">.</span><span class="n">constructorId</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">positionText</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">positionOrder</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">r</span><span class="p">.</span><span class="n">raceId</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="k">year</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="nb">date</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">round</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">raceName</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">constructorName</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">CONCAT</span><span class="p">(</span><span class="n">surname</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;, &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">forename</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">driverName</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">d</span><span class="p">.</span><span class="nb">number</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">d</span><span class="p">.</span><span class="n">url</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">dob</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">d</span><span class="p">.</span><span class="n">nationality</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="n">sql_inventory</span><span class="p">.</span><span class="n">results</span><span class="w"> </span><span class="n">r</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">JOIN</span><span class="w"> </span><span class="n">races</span><span class="w"> </span><span class="n">a</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">raceId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">raceId</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">JOIN</span><span class="w"> </span><span class="n">drivers</span><span class="w"> </span><span class="n">d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">driverId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">driverId</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">JOIN</span><span class="w"> </span><span class="n">constructors</span><span class="w"> </span><span class="k">c</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">constructorId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">constructorId</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>This script grabs the <code>driverID</code>, <code>constructorID</code>, <code>positionText</code>, <code>positionOrder</code>, and <code>raceID</code> from the <code>results</code>table. <code>positionText</code> gives the numeric finishing position of each car that finished the race and otherwise gives a letter indicating the reason for not finishing the race. In contrast, <code>positionOrder</code> gives the numeric finishing position regardless of whether or not the race was completed. Either could be handy, so we grab both.</p>
+<p>The selected columns of <code>results</code> are appended by the <code>year</code>, <code>date</code>, and <code>round</code> from the <code>races</code> table and the <code>number</code>, <code>url</code>, <code>dob</code>, and <code>nationality</code> columns from the <code>drivers</code> table. We also contruct a <code>driverName</code> column by combining the <code>surname</code> and <code>forename</code> columns from the <code>drivers</code> table.</p>
+<p>The three lines beginning with <code>JOIN</code> and <code>ON</code> link the <code>results</code> tables with the other tables via common columns.</p>
+<p>The resulting dataset is saved to <code>f1-teammate-data-raw.csv</code>. Let&rsquo;s read this data into R and take a quick look:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">rawData</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&#34;f1-teammate-data-raw.csv&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rawData</span>
+</span></span></code></pre></div><pre tabindex="0"><code>  driverId constructorId positionText positionOrder raceID year       date round              raceName
+1        1             1            1             1     18 2008 2008-03-16     1 Australian Grand Prix
+2        2             2            2             2     18 2008 2008-03-16     1 Australian Grand Prix
+3        3             3            3             3     18 2008 2008-03-16     1 Australian Grand Prix
+4        4             4            4             4     18 2008 2008-03-16     1 Australian Grand Prix
+5        5             1            5             5     18 2008 2008-03-16     1 Australian Grand Prix
+6        6             3            6             6     18 2008 2008-03-16     1 Australian Grand Prix
+  constructorName         driverName number                                            url        dob
+1         McLaren    Hamilton, Lewis     44    http://en.wikipedia.org/wiki/Lewis_Hamilton 1985-01-07
+2      BMW Sauber     Heidfeld, Nick   NULL     http://en.wikipedia.org/wiki/Nick_Heidfeld 1977-05-10
+3        Williams      Rosberg, Nico      6      http://en.wikipedia.org/wiki/Nico_Rosberg 1985-06-27
+4         Renault   Alonso, Fernando     14   http://en.wikipedia.org/wiki/Fernando_Alonso 1981-07-29
+5         McLaren Kovalainen, Heikki   NULL http://en.wikipedia.org/wiki/Heikki_Kovalainen 1981-10-19
+6        Williams   Nakajima, Kazuki   NULL   http://en.wikipedia.org/wiki/Kazuki_Nakajima 1985-01-11
+  nationality points
+1     British     10
+2      German      8
+3      German      6
+4     Spanish      5
+5     Finnish      4
+6    Japanese      3
+</code></pre><p>Looks as though everything is in order here. In the next post, I will show how I manupulated this dataset using <code>dplyr</code> to calculate the relative performance between teammates.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-07-28</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" data-title="Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL" data-hashtags="SQL,Motorsports,Formula 1,Ergast"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" data-hashtag="SQL"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" data-title="Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" data-title="Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" data-title="Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/sql/">SQL</a>,&nbsp;<a href="/tags/motorsports/">Motorsports</a>,&nbsp;<a href="/tags/formula-1/">Formula 1</a>,&nbsp;<a href="/tags/ergast/">Ergast</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2-le_mans_2023/" class="prev" rel="prev" title="Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Steven Rossi</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":-1},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

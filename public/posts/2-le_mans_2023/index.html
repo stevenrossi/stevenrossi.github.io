@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions - Steven Rossi</title><meta name="Description" content="Steven Rossi"><meta property="og:title" content="Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions" />
+<meta property="og:description" content="The 2023 24 hours of Le Mans was an historic edition of the legendary endurance race, not only because it marked the 100 year anniversary from the first running, but also because it featured the return of a number of hallowed car manufacturers to the top flight of sports car racing. In this project I aim to make a basic visualization of the distance travelled by each car in the 2023 edition of Le Mans." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://stevenrossi.github.io/posts/2-le_mans_2023/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-07-24T23:12:51-07:00" />
+<meta property="article:modified_time" content="2023-07-24T23:12:51-07:00" /><meta property="og:site_name" content="Steven Rossi" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions"/>
+<meta name="twitter:description" content="The 2023 24 hours of Le Mans was an historic edition of the legendary endurance race, not only because it marked the 100 year anniversary from the first running, but also because it featured the return of a number of hallowed car manufacturers to the top flight of sports car racing. In this project I aim to make a basic visualization of the distance travelled by each car in the 2023 edition of Le Mans."/>
+<meta name="application-name" content="Steven Rossi">
+<meta name="apple-mobile-web-app-title" content="Steven Rossi"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://stevenrossi.github.io/posts/2-le_mans_2023/" /><link rel="prev" href="https://stevenrossi.github.io/posts/1-wwc/" /><link rel="next" href="https://stevenrossi.github.io/posts/3-f1-teammates-part-1-sql/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/stevenrossi.github.io\/posts\/2-le_mans_2023\/"
+        },"genre": "posts","keywords": "R, Motorsports, Data Scraping, Visualization","wordcount":  3009 ,
+        "url": "https:\/\/stevenrossi.github.io\/posts\/2-le_mans_2023\/","datePublished": "2023-07-24T23:12:51-07:00","dateModified": "2023-07-24T23:12:51-07:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Steven Rossi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Steven Rossi">Steven Rossi</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/about/"> About </a><a class="menu-item" href="/viz/"> Interactive Tools </a><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Steven Rossi">Steven Rossi</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/about/" title="">About</a><a class="menu-item" href="/viz/" title="">Interactive Tools</a><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Steven Rossi</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-07-24">2023-07-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3009 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;15 minutes&nbsp;</div>
+        </div><div class="content" id="content"><p>The 2023 24 hours of Le Mans was an historic edition of the legendary endurance race, not only because it marked the 100 year anniversary from the first running, but also because it featured the return of a number of hallowed car manufacturers to the top flight of sports car racing. In this project I aim to make a basic visualization of the distance travelled by each car in the 2023 edition of Le Mans. In doing so, my real goal was not to make any specific insight into the race result but was to see if I could scrape images of all of the cars from an online source and use these in the visualization.</p>
+<h1 id="background-on-the-24-hours-of-le-mans">Background on the 24 Hours of Le Mans</h1>
+<h2 id="history-of-le-mans">History of Le Mans</h2>
+<p>The <a href="https://en.wikipedia.org/wiki/24_Hours_of_Le_Mans" target="_blank" rel="noopener noreffer ">24 Hours of Le Mans</a> (or, 24 Heures du Mans) is one of the most prestigious races in motorsport and the oldest active endurance race in the world, first being run in 1923. The race, which is won by the car the covers the greatest distance in 24 hours, is run at the Circuit de la Sarthe at Le Mans, Sarthe, France, which is an amalgamation of public roads and private, race-specific segments that measures 13.626 km in length in its present configuration. The race is currently the centerpiece of the World Endurance Championship (WEC), which is a worldwide series of endurance races, each lasting at least six hours.</p>
+<p>In motorosports, &ldquo;sport cars&rdquo; are closed-wheel, two-seater cars that are either prototypes (i.e., purpose-built for racing and not modified from a production car) or based on high-performance production vehicles. This is contrast to &ldquo;formula&rdquo; racing, which employs strictly purpose-buit, open-wheel, single-seaters, and to either &ldquo;stock car&rdquo; or &ldquo;touring car&rdquo; racing, which are both generally based on common sedans or hatchbacks. Sports car races usually feature multiple classes of car racing simultaneously (i.e., both prototypes and production-based cars), with prototype classes being the &ldquo;top&rdquo; or fastest classes.</p>
+<p>Bugatti, Bentley, and Alfa Romeo were each multiple-time winners of the initial Le Mans races held in the interwar period, with Ferrari and Jaguar emerging as the top manufacters of the postwar era. Ferraris took 6 consecutive races between 1960 and 1965, only to be knocked off their perch by the unlimited bankroll of Ford Motor Company and the ingenuity of Carroll Shelby. (The story of the legendary 1966 race, in which Bruce Mclaren and Chris Amon drove the Ford GT40 Mk. II to victory in a 1-2-3 finish for Ford, was recently told in the film <a href="https://www.imdb.com/title/tt1950186/" target="_blank" rel="noopener noreffer "><em>Ford v Ferrari</em></a>). After failing to win back their Le Man crown in the following years, Ferrari withdrew from sportscar racing to focus soley on Formula 1. Privateers would continue to run their own Ferraris at Le Mans, but Ferrari would not officially back another top-level prototype entry at Le Mans for the next five decades.</p>
+<p>Porsche were regular Le Mans winners from 1970 through the late 1980s, and a number of privateer teams (i.e., teams not backed by a manufacturer) also excelled. The late 80s and 90s marked an intensely competitive period, with Sauber/Mercedes, Jaguar, Mazda, Peugeot, Porsche, McLaren, and BMW each taking overall victories.</p>
+<p>Many manufacturers withdraw from sports car racing in the new millenium due to high costs, ushering in a new era of largely uncompetitive prototype racing. Audi won 13 races between 2000 and 2014, while Porsche won each Le Mans between 2015 and 2017. Toyota were consecutive winners from 2018 to 2022, facing little competition in each race. Indeed, from 2019 to 2022, Toyota&rsquo;s only challengers in the top prototype class were privateer teams running on comparatively miniscule budgets or by cars that had been grandfathered into the prototype class under previous rulesets and posed no serious threat to Toyota.</p>
+<h2 id="the-2023-world-endurance-championship-season">The 2023 World Endurance Championship season</h2>
+<p>New regulations were recently introduced that were aimed at reducing the cost of fielding a top-class prototype (now termed &ldquo;hypercars&rdquo;), prompting many manufacturers to establish new sports car programs. Peugout, Ferrari, Porsche, and Cadillac announced entries for the 2023 WEC season while Lamborghini, BMW,  and Alpine are slated to join in 2024. Would any of these new teams be able to take down the formidable Toyota Gazoo Racing?</p>
+<p>Le Mans was the fourth race on the 2024 WEC calendar, following the 1000 Miles of Sebring in Florida, the 6 hours of Portimão in the Algarve region of Portugal, and the 6 Hours of Spa-Francorchamps at the historic Circuit de Spa-Francorchamps in Belgium. Ferrari&rsquo;s Antonio Fuoco pulled off a shock in qualification for the opening race at Sebring, putting the #50 Ferrari on pole, though both of Toyota&rsquo;s cars (#7 and #8) passed the Ferrari early in the actual race and Toyota cruised to a comfortable victory.</p>
+<p>I was lucky enough to attend the second race of the season at Portimão. This time, technical issues hampered the #7 Toyota, but the #8 Toyota was able to easily cruise to victory. The Ferraris looked comfortably quicker than the rest of the field and, as a Ferrari fan, I was happy to see the #50 take second place, but closing the gap to Toyota still felt a very long way off. (As an aside, I will mention that Cadillac&rsquo;s V8 engine sounds so impressive in person - you always know when the Cadillac is driving past you even if you&rsquo;re watching some other part of the race track. Unfortunately most of the other hypercars run hybrid V6 configurations, which don&rsquo;t sound nearly as imposing.)</p>
+<table style="width: 100%">
+<colgroup>
+ <col span="1" style="width: 85%;">
+ <col span="1" style="width: 15%;">
+</colgroup>
+<tbody>
+<tr>
+<td><img src="/images/post2/pitlane-prema.jpeg" alt=""/></td>
+<td><i>The unbiased author enjoys a stroll down pitlane at the 6 Hours of Portimão.</i></td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100%">
+<colgroup>
+ <col span="1" style="width: 50%;">
+ <col span="1" style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td><img src="/images/post2/toyota_8_portugal_paddock.jpg"  alt=""/></td>
+<td><i>The author at the 2023 6 Hours of Portimão paddock with Ryō Hirakawa and Sébastien Buemi of the #8 Toyota. Buemi won Le Mans the 2014, 2018, 2019, and 2022, was Formula E champion in 2015-16 and competed in 55 Formula 1 races for Red Bull junior team Toro Rosso. Hirakawa won the 2022 Le Mans race alongside Buemi.</i> </td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100%">
+<colgroup>
+ <col span="1" style="width: 50%;">
+ <col span="1" style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td><img src="/images/post2/giovinazzi.jpg" alt=""/></td>
+<td><i>The author at the 2023 6 Hours of Portimão paddock with Antonio Giovinazzi of the #51 Ferrari and eventual winner of the 2023 edition of Le Mans. Giovinazzi completed in 61 Formula 1 races between 2017 and 2021 for Sauber/Alfa Romeo.</i></td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100%">
+<colgroup>
+ <col span="1" style="width: 50%;">
+ <col span="1" style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td><img src="/images/post2/ferrari_51_in_garage.jpg" alt=""/></td>
+<td><i>The #51 receives some final attention in the pits before going out for the 6 Hours of Portimão.</i></td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100%">
+<colgroup>
+ <col span="1" style="width: 80%;">
+ <col span="1" style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td><img src="/images/post2/turn-1-portimao.jpeg" alt="" height="400"/></td>
+<td><i>The #51 Ferrari passes the United Autosports LMP2 car on the inside going into turn 1 at the Autódromo Internacional do Algarve during Free Practice 3 of the 6 Hours of Portimão.</i></td>
+</tr>
+</tbody>
+</table>
+<br>
+<p>Toyota took pole in the third race of the season at Spa and went on to finish the race 1-2. The #51 Ferrari took third place, a minute and nine seconds behind the winning Toyota. Toyota&rsquo;s GR010 Hybrid looked unbeatable going into the climax of the season.</p>
+<p>Ferrari started the Le Mans weekend in ideal fashion, taking a 1-2 in qualifying while Toyota could only manage positions 3 and 5. However, the #8 Toyota took the lead from the #50 Ferrari on the first lap of the race and stayed comfortably ahead for the first stint until rain and crashes mixed up the field. An <a href="https://www.youtube.com/watch?v=SzHBUuXrU5M" target="_blank" rel="noopener noreffer ">overnight crash</a> put the #7 Toyota out of the race, while the #8 Toyota battled with the #50 Ferrari for the lead, though the latter car was forced to pit with a leak and lost six laps. The #51 Ferrari and #8 Toyota would go on to fight for the lead, with the #8 eventually <a href="https://www.youtube.com/watch?v=PDy82c2jeew" target="_blank" rel="noopener noreffer ">spinning out</a> and taking damage with less than two hours to go, handing Ferrari a historic and unexpected victory on its return to Le Mans.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/post2/ferrari_post_race.png"
+        data-srcset="/images/post2/ferrari_post_race.png, /images/post2/ferrari_post_race.png 1.5x, /images/post2/ferrari_post_race.png 2x"
+        data-sizes="auto"
+        alt="/images/post2/ferrari_post_race.png"
+        title="PostRace" /></p>
+<p>It was a great race. I recommend watching it if you have <a href="https://www.youtube.com/watch?v=ciSNHrKrkeQ" target="_blank" rel="noopener noreffer ">24 hours to spare</a>.</p>
+<h1 id="visualizing-the-results-of-the-2023-race">Visualizing the results of the 2023 race</h1>
+<h2 id="scraping-website-for-car-images">Scraping website for car images</h2>
+<p>The official WEC website hosts a <a href="https://www.fiawec.com/en/race/result/4792" target="_blank" rel="noopener noreffer ">page</a> with results from the 2023 race at Le Mans with small pictures of each of the 62 cars - these would be time consuming to save one-by-one, so let&rsquo;s see if we can scrape them. I copied the source code for this page and dumped it in a text file called <code>le-mans-website.txt</code>.</p>
+<p>On the official website, if we check the URL of a car image, we see something like this:</p>
+<br>
+<pre tabindex="0"><code>https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72555/2023-lm-51-ferrari-droite_46c6eb.png
+</code></pre><br>
+<p>We note that the car images are PNGs, and that the image is stored in a directory called &ldquo;entry_car&rdquo; - we can probably use this information to distinguish the car images from other images on the page. For instance, there is also a tire manufacturer logo for each car, with URL as follows:</p>
+<br>
+<pre tabindex="0"><code>https://storage.googleapis.com/ecm-prod/media/cache/tyres/assets/Tyre/Logo_Michelin-1819_5acca3_d0741b.png
+</code></pre><br>
+<p>We can see that this image is stored in a &ldquo;tyres&rdquo; folder, not the &ldquo;entry_car&rdquo; folder. So, let&rsquo;s grab every line of source code that displays a PNG image from the &ldquo;entry_car&rdquo; directory:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">sourceCode</span> <span class="o">&lt;-</span> <span class="nf">readLines</span><span class="p">(</span><span class="s">&#34;le-mans-website.txt&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rows</span> <span class="o">&lt;-</span> <span class="nf">grepl</span><span class="p">(</span> <span class="s">&#34;png&#34;</span><span class="p">,</span> <span class="n">sourceCode</span> <span class="p">)</span> <span class="o">&amp;</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">grepl</span><span class="p">(</span> <span class="s">&#34;&lt;img src&#34;</span><span class="p">,</span> <span class="n">sourceCode</span> <span class="p">)</span> <span class="o">&amp;</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">grepl</span><span class="p">(</span> <span class="s">&#34;entry_car&#34;</span><span class="p">,</span> <span class="n">sourceCode</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sourceCode</span> <span class="o">&lt;-</span> <span class="n">sourceCode[rows</span><span class="p">,</span> <span class="n">]</span>
+</span></span></code></pre></div><br>
+<p>Now let&rsquo;s extract the URL from each from. A typical row looks like this:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">sourceCode[1]</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;                    &lt;img src=\&#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72555/2023-lm-51-ferrari-droite_46c6eb.png\&#34; alt=\&#34;Ferrari 499P\&#34;&#34;
+</code></pre><br>
+<p>We want to extract everything between <code>https://</code> and <code>.png</code>, which we can do using the <code>gsub()</code>:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">pngURL</span> <span class="o">&lt;-</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#34;.*&lt;img src=\&#34;|\&#34;.*&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">,</span><span class="n">sourceCode</span><span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>The first argument of <code>gsub()</code> is the <a href="https://en.wikipedia.org/wiki/Regular_expression" target="_blank" rel="noopener noreffer ">regular expression</a> to match, the second argument is a string to replace the matched text with, and the third argument is the string <code>x</code>where matches are sought. We pass the argument <code>&quot;.*&lt;img src=\&quot;\\s*|\&quot;.*&quot;</code> as the first argument. The initial portion of this argument, <code>.*&lt;img src=&quot;</code> selects all of the characters up to and including <code>&lt;img src=</code>, while the final portion, <code>\&quot;.*</code>, selects all of the charcters from <code>\&quot;</code> onward. The second argument is a blank string, which effectively deletes all parts of <code>x</code> that match the first argument.</p>
+<p>If we inspect pngURL, we see that it contains 124 elements - two identical entries for each car. We can delete duplicate entries using the <code>unique()</code> function:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">pngURL</span> <span class="o">&lt;-</span> <span class="nf">unique</span><span class="p">(</span><span class="n">pngURL</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Number of cars - should be 62</span>
+</span></span><span class="line"><span class="cl"><span class="n">N</span> <span class="o">&lt;-</span> <span class="nf">length</span><span class="p">(</span><span class="n">pngURL</span><span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>Now we&rsquo;ve got a list of URLs that we can download the images from, but we&rsquo;ll need to give each image a name. The simplest thing to do is to name each image using each car&rsquo;s unique number. Let&rsquo;s check out a bunch of URLs and see how we can do this.</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">pngURL[1</span><span class="o">:</span><span class="m">20</span><span class="n">]</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72555/2023-lm-51-ferrari-droite_46c6eb.png&#34;     
+ [2] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72936/2023-lm-toyota-gr010-8-droite_b985c4.png&#34; 
+ [3] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72546/2023-lm-2-cadillac-droite_db12c3.png&#34;     
+ [4] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72547/2023-lm-3-cadillac-droite_6c6dc0.png&#34;     
+ [5] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72554/2023-lm-50-ferrari-droite_256646.png&#34;     
+ [6] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72560/2023-lm-glickenhaus-708-droite_6646c6.png&#34;
+ [7] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72561/2023-lm-glickenhaus-709-droite_f3a4c3.png&#34;
+ [8] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72557/2023-lm-93-peugeot-9x8-droite_46c6ee.png&#34; 
+ [9] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72572/2023-lm-34-oreca-07-droite_31bc23.png&#34;    
+[10] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72938/2023-lm-41-oreca-07-droite_519647.png&#34;    
+[11] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72569/2023-lm-30-oreca-07-droite_0093c9.png&#34;    
+[12] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72574/2023-lm-36-oreca-07-droite_646c70.png&#34;    
+[13] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72937/2023-lm-31-oreca-07-droite_b98809.png&#34;    
+[14] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/73532/2023-lm-48-oreca-07-droite_216481.png&#34;    
+[15] &#34;https://storage.googleapis.com/ecm-prod/media/cache/entry_car/assets/1/engage/72563/2023-lm-10-oreca-07-droite_f80700.png&#34;    
+</code></pre><br>
+<p>It looks like most cars have a filename starting with <code>2023-lm-</code>, followed by the car number, followed by <code>-</code> and the manufacturer&rsquo;s name. The Toyota and Glickenhaus cars follow different naming conventions, but we can fix those seperately.</p>
+<p>Using similar logic to before, we delete everything up to and including <code>lm-</code> and everything from the next <code>-</code> onward.</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl">  <span class="n">carNumber</span> <span class="o">&lt;-</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#34;.*lm-|-.*&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">,</span><span class="n">pngURL</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>&gt; carNumber
+ [1] &#34;51&#34;          &#34;toyota&#34;      &#34;2&#34;           &#34;3&#34;           &#34;50&#34;          &#34;glickenhaus&#34; &#34;glickenhaus&#34;
+ [8] &#34;93&#34;          &#34;34&#34;          &#34;41&#34;          &#34;30&#34;          &#34;36&#34;          &#34;31&#34;          &#34;48&#34;         
+[15] &#34;10&#34;          &#34;5&#34;           &#34;311&#34;         &#34;23&#34;          &#34;35&#34;          &#34;45&#34;          &#34;22&#34;         
+[22] &#34;6&#34;           &#34;37&#34;          &#34;28&#34;          &#34;65&#34;          &#34;33&#34;          &#34;94&#34;          &#34;25&#34;         
+[29] &#34;86&#34;          &#34;85&#34;          &#34;54&#34;          &#34;43&#34;          &#34;98&#34;          &#34;9&#34;           &#34;56&#34;         
+[36] &#34;100&#34;         &#34;39&#34;          &#34;74&#34;          &#34;24&#34;          &#34;38&#34;          &#34;57&#34;          &#34;911&#34;        
+[43] &#34;80&#34;          &#34;88&#34;          &#34;4&#34;           &#34;777&#34;         &#34;47&#34;          &#34;77&#34;          &#34;32&#34;         
+[50] &#34;63&#34;          &#34;toyota&#34;      &#34;66&#34;          &#34;923&#34;         &#34;75&#34;          &#34;72&#34;          &#34;83&#34;         
+[57] &#34;60&#34;          &#34;16&#34;          &#34;55&#34;          &#34;21&#34;          &#34;13&#34;          &#34;14&#34;    
+</code></pre><br>
+<p>It worked for every car except Toyota and Glickenhaus. Let&rsquo;s clean those entries up now:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl">  <span class="n">t</span> <span class="o">&lt;-</span> <span class="n">carNumber</span><span class="o">==</span><span class="s">&#34;toyota&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">carNumber[t]</span> <span class="o">&lt;-</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#34;.*gr010-|-.*&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">,</span><span class="n">pngURL[t]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">g</span> <span class="o">&lt;-</span> <span class="n">carNumber</span><span class="o">==</span><span class="s">&#34;glickenhaus&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">carNumber[g]</span> <span class="o">&lt;-</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#34;.*glickenhaus-|-.*&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">,</span><span class="n">pngURL[g]</span><span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>Now let&rsquo;s loop over the list URLs and download each file:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl">  <span class="c1"># Create directory to store images</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">dir.create</span><span class="p">(</span><span class="s">&#34;images&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># Download images</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span> <span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="n">N</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># File to save image to</span>
+</span></span><span class="line"><span class="cl">    <span class="n">destfile</span> <span class="o">&lt;-</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;images/&#34;</span><span class="p">,</span><span class="n">carNumber[i]</span><span class="p">,</span><span class="s">&#34;.png&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Download image to destfile</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">download.file</span><span class="p">(</span> <span class="n">url</span><span class="o">=</span><span class="n">pngURL[i]</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                   <span class="n">destfile</span><span class="o">=</span><span class="n">destfile</span><span class="p">)</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div><br>
+<p>We can check the contents of the images directory to see if the files downloaded:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="nf">list.files</span><span class="p">(</span><span class="s">&#34;images&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] &#34;10.png&#34;  &#34;100.png&#34; &#34;13.png&#34;  &#34;14.png&#34;  &#34;16.png&#34;  &#34;2.png&#34;   &#34;21.png&#34;  &#34;22.png&#34;  &#34;23.png&#34;  &#34;24.png&#34; 
+[11] &#34;25.png&#34;  &#34;28.png&#34;  &#34;3.png&#34;   &#34;30.png&#34;  &#34;31.png&#34;  &#34;311.png&#34; &#34;32.png&#34;  &#34;33.png&#34;  &#34;34.png&#34;  &#34;35.png&#34; 
+[21] &#34;36.png&#34;  &#34;37.png&#34;  &#34;38.png&#34;  &#34;39.png&#34;  &#34;4.png&#34;   &#34;41.png&#34;  &#34;43.png&#34;  &#34;45.png&#34;  &#34;47.png&#34;  &#34;48.png&#34; 
+[31] &#34;5.png&#34;   &#34;50.png&#34;  &#34;51.png&#34;  &#34;54.png&#34;  &#34;55.png&#34;  &#34;56.png&#34;  &#34;57.png&#34;  &#34;6.png&#34;   &#34;60.png&#34;  &#34;63.png&#34; 
+[41] &#34;65.png&#34;  &#34;66.png&#34;  &#34;7.png&#34;   &#34;708.png&#34; &#34;709.png&#34; &#34;72.png&#34;  &#34;74.png&#34;  &#34;75.png&#34;  &#34;77.png&#34;  &#34;777.png&#34;
+[51] &#34;8.png&#34;   &#34;80.png&#34;  &#34;83.png&#34;  &#34;85.png&#34;  &#34;86.png&#34;  &#34;88.png&#34;  &#34;9.png&#34;   &#34;911.png&#34; &#34;923.png&#34; &#34;93.png&#34; 
+[61] &#34;94.png&#34;  &#34;98.png&#34;
+</code></pre><h2 id="retrieving-results">Retrieving results</h2>
+<p>Scraping the results from the WEC website source could would be a pain, so let&rsquo;s read the results in from Wikipedia, which is easier to deal with. We can first use the <code>GET()</code> function in the <code>httr</code> package can be used to scrape websites for information, then use the <code>readHTMLTable()</code> function in the <code>XML</code> package to read-in the tables from the scraped website:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">wiki</span> <span class="o">&lt;-</span> <span class="nf">GET</span><span class="p">(</span><span class="s">&#34;https://en.wikipedia.org/wiki/2023_24_Hours_of_Le_Mans&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">wikiTables</span> <span class="o">&lt;-</span> <span class="nf">readHTMLTable</span><span class="p">(</span> <span class="n">doc</span><span class="o">=</span><span class="nf">content</span><span class="p">(</span><span class="n">wiki</span><span class="p">,</span><span class="s">&#34;text&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span> <span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>The 2023 edition of Le Mans featured four classes of cars:</p>
+<ul>
+<li>Hypercar - purpose-built prototypes developed by each team</li>
+<li>LMP2 - purpose-built prototypes constructed by each team from a list of approved parts from specific manufacturers</li>
+<li>GTE-AM - modified, production-based <em>grand tourers</em></li>
+<li>Innovative - a special class for experimental concepts. This year&rsquo;s Innovative entry was a NASCAR that was specially modified to handle the Le Mans circuit.</li>
+</ul>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">resultTable</span> <span class="o">&lt;-</span> <span class="n">wikiTables[[5]]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">colnames</span><span class="p">(</span><span class="n">resultTable</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="n">resultTable[1</span><span class="p">,</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Length of Circuit de la Sarthe (km)</span>
+</span></span><span class="line"><span class="cl"><span class="n">circuitLengthKM</span> <span class="o">&lt;-</span> <span class="m">13.626</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">resultTable</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span> <span class="n">resultTable</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                       <span class="n">Pos</span><span class="o">!=</span><span class="s">&#34;Pos&#34;</span><span class="p">,</span> <span class="c1"># Remove first row</span>
+</span></span><span class="line"><span class="cl">                       <span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">No.</span><span class="p">)</span> <span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">               <span class="nf">mutate</span><span class="p">(</span> <span class="n">Distance</span><span class="o">=</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">Laps</span><span class="p">)</span><span class="o">*</span><span class="n">circuitLengthKM</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                       <span class="n">Class</span><span class="o">=</span><span class="nf">if_else</span><span class="p">(</span><span class="n">Class</span><span class="o">==</span><span class="s">&#34;LMP2 (Pro-Am)&#34;</span><span class="p">,</span><span class="s">&#34;LMP2&#34;</span><span class="p">,</span><span class="n">Class</span><span class="p">)</span> <span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>Only one car finished on the lead lap with the winning #51 Ferrari was the #8 Toyota. At the time the #51 was crossing the finish line, the #8 Toyota was 1 minute and XXX behind. Let&rsquo;s subtract this portion of the lap that was unfished when the Ferrari took the chequered flag from the Toyota&rsquo;s overall distance travelled.</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="c1"># Time differential between #8 Toyota and winning #51 Ferrari</span>
+</span></span><span class="line"><span class="cl"><span class="n">timeDiff</span> <span class="o">&lt;-</span> <span class="n">resultTable[2</span><span class="p">,</span><span class="s">&#34;Time/Reason&#34;</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Extract the number of minutes from the timeDiff string</span>
+</span></span><span class="line"><span class="cl"><span class="n">mins</span> <span class="o">&lt;-</span> <span class="nf">str_match</span><span class="p">(</span> <span class="n">timeDiff</span><span class="p">,</span> <span class="s">&#34;\\+\\s*(.*?)\\:&#34;</span> <span class="p">)</span><span class="n">[2]</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">as.numeric</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Extract the number of seconds from the timeDiff string</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and add the number of minutes</span>
+</span></span><span class="line"><span class="cl"><span class="n">secDiff</span> <span class="o">&lt;-</span> <span class="nf">sub</span><span class="p">(</span><span class="s">&#34;.*:&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">,</span><span class="n">timeDiff</span><span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">           <span class="nf">as.numeric</span><span class="p">()</span> <span class="o">+</span> <span class="m">60</span><span class="o">*</span><span class="n">mins</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Source: The B Pillar (https://mcusercontent.com/58ec14b624aac0d4f32a73311/files/1a937598-5795-63eb-6c7b-4a57844916e4/TBP_Report___2023_WEC_R04_Le_Mans.pdf)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Brandon Hartley - 3:30.475</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Ryo Hirawkawa - 3:31.753</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Sebastian Buemi - 3:31.015</span>
+</span></span><span class="line"><span class="cl"><span class="n">avgLapTimeSecs</span> <span class="o">&lt;-</span> <span class="nf">mean</span><span class="p">(</span> <span class="nf">c</span><span class="p">(</span><span class="m">30.475+3</span><span class="o">*</span><span class="m">60</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                          <span class="m">31.753+3</span><span class="o">*</span><span class="m">60</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                          <span class="m">31.015+3</span><span class="o">*</span><span class="m">60</span><span class="p">)</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Proportion of lap remaining when #51 Ferrari took chequered flag</span>
+</span></span><span class="line"><span class="cl"><span class="n">pLapRemaining</span> <span class="o">&lt;-</span> <span class="n">secs</span><span class="o">/</span><span class="n">avgLapTimeSecs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Subtract lap distance remaining from distance travelled</span>
+</span></span><span class="line"><span class="cl"><span class="n">resultTable[2</span><span class="p">,</span><span class="s">&#34;Distance&#34;</span><span class="n">]</span> <span class="o">&lt;-</span> <span class="n">resultTable[2</span><span class="p">,</span><span class="s">&#34;Distance&#34;</span><span class="n">]</span> <span class="o">-</span> <span class="n">pLapRemaining</span><span class="o">*</span><span class="n">circuitLengthKM</span>
+</span></span></code></pre></div><br>
+<h2 id="plotting-results">Plotting results</h2>
+<p>We&rsquo;ll want to differentiate the cars by classes, so let&rsquo;s assign each class a unique colour. The <code>brewer.pal()</code> function in the <code>RColorBrewer</code> package is useful for generating aesthetically pleasing colour palettes:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">class</span> <span class="o">&lt;-</span> <span class="nf">unique</span><span class="p">(</span><span class="n">resultTable</span><span class="o">$</span><span class="n">Class</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">RColorBrewer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">cols</span> <span class="o">&lt;-</span> <span class="nf">brewer.pal</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">class</span><span class="p">),</span><span class="s">&#34;Set1&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>Let&rsquo;s set up a plot so that the x-axis is distance travelled and the y-axis represents finishing position, with first place at the top and last place at the bottom.</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="nf">png</span><span class="p">(</span> <span class="n">file</span><span class="o">=</span><span class="s">&#34;le-mans-2023-finishing-positions.png&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="n">res</span><span class="o">=</span><span class="m">300</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="n">height</span><span class="o">=</span><span class="m">12</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="n">width</span><span class="o">=</span><span class="m">7</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="n">units</span><span class="o">=</span><span class="s">&#34;in&#34;</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We&#39;ll need a maximum distance travelled to bound the</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># x-axis, so round furthest distance travelled to next</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1000th using round_any() in plyr package</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">plyr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">maxX</span> <span class="o">&lt;-</span> <span class="nf">round_any</span><span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="n">resultTable</span><span class="o">$</span><span class="n">Distance</span><span class="p">),</span><span class="m">1000</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="n">ceiling</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">plot</span><span class="p">(</span> <span class="n">x</span>    <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">maxX</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">y</span>    <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">N</span><span class="m">+1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">,</span>       <span class="c1"># Empty plot</span>
+</span></span><span class="line"><span class="cl">      <span class="n">axes</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">xaxs</span> <span class="o">=</span> <span class="s">&#34;i&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">yaxs</span> <span class="o">=</span> <span class="s">&#34;i&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">xlab</span> <span class="o">=</span> <span class="s">&#34;Distance travelled (km)&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">ylab</span> <span class="o">=</span> <span class="s">&#34;Finishing position&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">main</span> <span class="o">=</span> <span class="s">&#34;91st 24 Hours of Le Mans (2023)&#34;</span> <span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>Add vertical grid lines to improve legibility and add a horizontal line to seperate the cars that finished the race from the cars that did not. The &ldquo;Pos&rdquo; or position column of the <code>resultTable</code> is labelled DNF for any cars that did not finish.</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="nf">abline</span><span class="p">(</span> <span class="n">v</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">500</span><span class="p">,</span><span class="n">maxX</span><span class="m">-500</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">1000</span><span class="p">),</span> <span class="n">col</span><span class="o">=</span><span class="s">&#34;grey80&#34;</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">3</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">abline</span><span class="p">(</span> <span class="n">v</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="n">maxX</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">1000</span><span class="p">),</span> <span class="n">col</span><span class="o">=</span><span class="s">&#34;grey60&#34;</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">3</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Number of cars that finished the race</span>
+</span></span><span class="line"><span class="cl"><span class="n">nFinishers</span> <span class="o">&lt;-</span> <span class="nf">sum</span><span class="p">(</span><span class="n">resultTable</span><span class="o">$</span><span class="n">Pos</span><span class="o">!=</span><span class="s">&#34;DNF&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># DNF line</span>
+</span></span><span class="line"><span class="cl"><span class="nf">abline</span><span class="p">(</span> <span class="n">h</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="n">nFinishers</span><span class="m">+0.5</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#34;orange&#34;</span> <span class="p">)</span>
+</span></span></code></pre></div><br>
+<p>Now let&rsquo;s loop over all the cars and plot the car image and a horizontal line indicating the distance travelled. We want the nose of the car to indicate the distance travelled, with a horizontal line trailing behind, coloured according to class.</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="nf">for</span><span class="p">(</span> <span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="n">N</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># Read-in the car image</span>
+</span></span><span class="line"><span class="cl">  <span class="n">carFilename</span> <span class="o">&lt;-</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;images/&#34;</span><span class="p">,</span><span class="n">resultTable[i</span><span class="p">,</span><span class="s">&#34;No.&#34;</span><span class="n">]</span><span class="p">,</span><span class="s">&#34;.png&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">carObj</span>      <span class="o">&lt;-</span> <span class="nf">readPNG</span><span class="p">(</span><span class="n">carFilename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># Distance travelled by car i</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dist</span> <span class="o">&lt;-</span> <span class="n">resultTable[i</span><span class="p">,</span><span class="s">&#34;Distance&#34;</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># Class of car i</span>
+</span></span><span class="line"><span class="cl">  <span class="n">classi</span> <span class="o">&lt;-</span> <span class="nf">which</span><span class="p">(</span> <span class="n">class</span> <span class="o">%in%</span> <span class="n">resultTable[i</span><span class="p">,</span><span class="s">&#34;Class&#34;</span><span class="n">]</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># Horizontal line trailing car i</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">segments</span><span class="p">(</span> <span class="n">x0</span><span class="o">=</span><span class="m">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">x1</span><span class="o">=</span><span class="n">dist</span><span class="m">-300</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">y0</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="n">i</span><span class="m">+1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">lwd</span><span class="o">=</span><span class="m">11</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">col</span><span class="o">=</span><span class="n">cols[classi]</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># Write car info in the trailing horizontal line</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># If statement prevents this from happening for cars that</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># DNF&#39;d early since there is no space to write</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span> <span class="n">dist</span><span class="o">&gt;</span><span class="m">500</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">label</span> <span class="o">&lt;-</span> <span class="nf">paste</span><span class="p">(</span><span class="n">resultTable[i</span><span class="p">,</span><span class="s">&#34;No.&#34;</span><span class="n">]</span><span class="p">,</span><span class="n">resultTable[i</span><span class="p">,</span><span class="s">&#34;Team&#34;</span><span class="n">]</span><span class="p">,</span><span class="n">resultTable[i</span><span class="p">,</span><span class="s">&#34;Chassis&#34;</span><span class="n">]</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&#34;-&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">text</span><span class="p">(</span> <span class="n">x</span>      <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">y</span>      <span class="o">=</span> <span class="n">N</span><span class="o">-</span><span class="n">i</span><span class="m">+0.95</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">pos</span>    <span class="o">=</span> <span class="m">4</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">col</span>    <span class="o">=</span> <span class="s">&#34;white&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">cex</span>    <span class="o">=</span> <span class="m">0.6</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># Plot the car image</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">addImg</span><span class="p">(</span> <span class="n">obj</span><span class="o">=</span><span class="n">carObj</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">x</span><span class="o">=</span><span class="n">dist</span><span class="m">-250</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">y</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="n">i</span><span class="m">+1.1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">width</span><span class="o">=</span><span class="m">500</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><br>
+<p>Finally, we can add the axes, legends, and labels:</p>
+<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="c1"># X-axis</span>
+</span></span><span class="line"><span class="cl"><span class="nf">axis</span><span class="p">(</span> <span class="n">side</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">maxX</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">1000</span><span class="p">)</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Y-axis - label in descending order</span>
+</span></span><span class="line"><span class="cl"><span class="nf">axis</span><span class="p">(</span> <span class="n">side</span>   <span class="o">=</span> <span class="m">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">at</span>     <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="nf">seq</span><span class="p">(</span><span class="n">N</span><span class="m">-4</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">-5</span><span class="p">),</span><span class="m">1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">labels</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">seq</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">5</span><span class="p">),</span><span class="n">N</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">las</span>    <span class="o">=</span> <span class="m">1</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Legend for car calsses</span>
+</span></span><span class="line"><span class="cl"><span class="nf">legend</span><span class="p">(</span> <span class="n">x</span>      <span class="o">=</span> <span class="s">&#34;bottomright&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">lwd</span>    <span class="o">=</span> <span class="m">11</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">col</span>    <span class="o">=</span> <span class="n">cols</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">legend</span> <span class="o">=</span> <span class="n">class</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">bty</span>    <span class="o">=</span> <span class="s">&#34;n&#34;</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Label the DNF line</span>
+</span></span><span class="line"><span class="cl"><span class="nf">par</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">text</span><span class="p">(</span> <span class="n">x</span>      <span class="o">=</span> <span class="m">0.9</span><span class="o">*</span><span class="n">maxX</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">y</span>      <span class="o">=</span> <span class="n">N</span><span class="o">-</span><span class="n">nFinishers</span><span class="m">-1.5</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">cex</span>    <span class="o">=</span> <span class="m">1.2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">labels</span> <span class="o">=</span> <span class="s">&#34;DNF&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">col</span>    <span class="o">=</span> <span class="s">&#34;orange&#34;</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">par</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Turn off plotting device</span>
+</span></span><span class="line"><span class="cl"><span class="nf">dev.off</span><span class="p">()</span>
+</span></span></code></pre></div><br>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/post2/le-mans-2023-finishing-positions.png"
+        data-srcset="/images/post2/le-mans-2023-finishing-positions.png, /images/post2/le-mans-2023-finishing-positions.png 1.5x, /images/post2/le-mans-2023-finishing-positions.png 2x"
+        data-sizes="auto"
+        alt="/images/post2/le-mans-2023-finishing-positions.png"
+        title="PostRace" /></p>
+<p>Not bad! Again, there is not a ton of insight to gain from this plot, but it does look pretty cool. The anomaly that jumps out are the finishes around the DNF line - the 41st and 42nd placed finishers appear to have covered a greater distance than the 40th placed car. This occured because the #57 Kessel Racing Ferrari and the #911 Proton Competition Porsche (41st and 42nd place finishers, respectively), retired from the race due to damage, while the #38 Hertz Team Jota Porsche (39th place) was still running at the conclusion of the race despite spending an appreciable amount of time in the garage.</p>
+<h1 id="next-steps">Next steps</h1>
+<p>I&rsquo;d like to apply the apply the table-scraping script to Wikipedia pages for previous Le Mans races and build up a dataset of finishes over the years. I&rsquo;d also like to do more detailed analyses of endurance car races, though the data is not as readily available as for, say, Formula 1.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-07-24</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://stevenrossi.github.io/posts/2-le_mans_2023/" data-title="Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions" data-hashtags="R,Motorsports,Data Scraping,Visualization"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://stevenrossi.github.io/posts/2-le_mans_2023/" data-hashtag="R"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://stevenrossi.github.io/posts/2-le_mans_2023/" data-title="Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://stevenrossi.github.io/posts/2-le_mans_2023/" data-title="Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://stevenrossi.github.io/posts/2-le_mans_2023/" data-title="Visualizing the 2023 24 Hours of Le Mans results in R using website scraping and regular expressions"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/r/">R</a>,&nbsp;<a href="/tags/motorsports/">Motorsports</a>,&nbsp;<a href="/tags/data-scraping/">Data Scraping</a>,&nbsp;<a href="/tags/visualization/">Visualization</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/1-wwc/" class="prev" rel="prev" title="Visualizing the age distribution of Women&#39;s World Cup squads using R"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Visualizing the age distribution of Women's World Cup squads using R</a>
+            <a href="/posts/3-f1-teammates-part-1-sql/" class="next" rel="next" title="Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL">Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Steven Rossi</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":-1},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
