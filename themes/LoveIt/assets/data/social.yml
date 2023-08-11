@@ -436,7 +436,7 @@ researchgate:
   Prefix: https://www.researchgate.net/profile/
   Title: ResearchGate
   Icon:
-    Class: fab fa-researchgate fa-fw
+    Src: svg/icons/researchgate.svg
 
 # 056: Mastodon
 mastodon:
