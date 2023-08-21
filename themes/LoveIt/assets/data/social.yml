@@ -104,7 +104,7 @@ quora:
 
 # 014: Keybase
 keybase:
-  Weight: 14
+  Weight: 99
   Prefix: https://keybase.io/
   Title: Keybase
   Icon:
@@ -535,7 +535,7 @@ pleroma:
 
 # 068: Kaggle
 kaggle:
-  Weight: 68
+  Weight: 3
   Prefix: https://kaggle.com/
   Title: Kaggle
   Icon:

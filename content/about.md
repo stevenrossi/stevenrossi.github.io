@@ -72,7 +72,7 @@ Quantitative scientist with 10+ years of professional experience in data analysi
   </tr>
   <tr valign=top>
     <td>2015-2023</td>
-    <td><b>Associate Consultant</b>
+    <td><b>Consultant</b>
     <br>
     Selected projects led: <br>
     <ul>
@@ -242,6 +242,7 @@ Quantitative scientist with 10+ years of professional experience in data analysi
     <td>3. </td>
     <td>
     <b>Rossi, S.P.</b>, Wang, Y., den Heyer, C.E., Benoît, H.P. Evaluating the potential impacts of grey seal predation and bycatch on cod productivity on the Western Scotian Shelf and in the Bay of Fundy.
+		<a href="https://arxiv.org/abs/2308.08662">(preprint)</a>
 		</td>
 	</tr>
   <tr valign=top>
