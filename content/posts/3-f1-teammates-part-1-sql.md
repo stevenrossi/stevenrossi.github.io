@@ -1,5 +1,5 @@
 ---
-title: 'Comparing the head-to-head performance of Formula 1 teammates, part 1: Retreiving Ergast data using SQL'
+title: 'Comparing the head-to-head performance of F1 teammates, part 1: Retreiving Ergast data using SQL'
 date: 2023-07-28T23:12:51-07:00
 draft: false
 tags: [SQL, Motorsports, Formula 1, Ergast]

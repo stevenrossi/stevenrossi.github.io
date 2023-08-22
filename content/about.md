@@ -54,8 +54,8 @@ Quantitative scientist with 10+ years of professional experience in data analysi
 ### Landmark Fisheries Research
 <table style="width: 100%">
     <colgroup>
-       <col span="1" style="width: 14%;">
-       <col span="1" style="width: 86%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 85%;">
     </colgroup>
 
   <tbody>
@@ -89,8 +89,8 @@ Quantitative scientist with 10+ years of professional experience in data analysi
 
 <table style="width: 100%" cellspacing="0" cellpadding="0">
     <colgroup>
-       <col span="1" style="width: 14%;">
-       <col span="1" style="width: 86%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 85%;">
     </colgroup>
 
   <tbody>
@@ -115,8 +115,8 @@ Quantitative scientist with 10+ years of professional experience in data analysi
 
 <table style="width: 100%" cellspacing="0" cellpadding="0">
     <colgroup>
-       <col span="1" style="width: 14%;">
-       <col span="1" style="width: 86%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 85%;">
     </colgroup>
 
   <tbody>
@@ -134,8 +134,8 @@ Quantitative scientist with 10+ years of professional experience in data analysi
 
 <table style="width: 100%" cellspacing="0" cellpadding="0">
     <colgroup>
-       <col span="1" style="width: 14%;">
-       <col span="1" style="width: 86%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 85%;">
     </colgroup>
 
   <tbody>
@@ -154,8 +154,8 @@ Quantitative scientist with 10+ years of professional experience in data analysi
 
 <table style="width: 100%" cellspacing="0" cellpadding="0">
     <colgroup>
-       <col span="1" style="width: 14%;">
-       <col span="1" style="width: 86%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 85%;">
     </colgroup>
 
   <tbody>
