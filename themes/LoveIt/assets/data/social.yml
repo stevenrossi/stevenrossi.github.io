@@ -16,7 +16,7 @@ linkedin:
 
 # 003: Twitter
 twitter:
-  Weight: 3
+  Weight: 98
   Prefix: https://twitter.com/
   Title: Twitter
   Icon:
