@@ -98,7 +98,7 @@ Quantitative scientist with 10+ years of professional experience in data analysi
     <td>2023</td>
     <td><b>Science Advisor</b>, <i>Casual</i>
     <br>
-    Evaluated the potential impacts of grey seal predation and fishery bycatch/discards on cod mortaltiy on the Western Scotian Shelf and Bay of Fundy.
+    Evaluated the potential impacts of grey seal predation and fishery bycatch/discards on cod mortality on the Western Scotian Shelf and Bay of Fundy.
 </td>
   </tr>
   <tr valign=top>
