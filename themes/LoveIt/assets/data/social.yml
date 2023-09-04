@@ -8,7 +8,7 @@ github:
 
 # 002: LinkedIn
 linkedin:
-  Weight: 2
+  Weight: 99
   Prefix: https://linkedin.com/in/
   Title: LinkedIn
   Icon:
@@ -16,7 +16,7 @@ linkedin:
 
 # 003: Twitter
 twitter:
-  Weight: 98
+  Weight: 97
   Prefix: https://twitter.com/
   Title: Twitter
   Icon:
@@ -104,7 +104,7 @@ quora:
 
 # 014: Keybase
 keybase:
-  Weight: 99
+  Weight: 98
   Prefix: https://keybase.io/
   Title: Keybase
   Icon:

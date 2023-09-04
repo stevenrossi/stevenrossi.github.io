@@ -9,7 +9,7 @@ customcss: "about.css"
 
 # Profile
 
-Quantitative scientist with 10+ years of professional experience in data analysis/visualization, modelling, Bayesian statistics, and strategy optimization. Highly proficient in a variety of scripting languages (e.g., R, MATLAB, Python, SQL) and complex model optimization tools (e.g., TMB, ADMB).
+Quantitative scientist with 10+ years of professional experience in data analysis, visualization, modelling, Bayesian statistics, and strategy optimization. Highly proficient in a variety of scripting languages (e.g., R, MATLAB, Python, SQL) and model optimization tools (e.g., TMB, ADMB, Stan).
 
 <br>
 <hr>
@@ -65,9 +65,9 @@ Quantitative scientist with 10+ years of professional experience in data analysi
     <br>
     Selected projects led: <br>
     <ul>
-    <li>Developing quantitative tools to account for changing demographics and meet Fisheries Act provisions in Canadian-origin Yukon River Chinook salmon <i>for Fisheries and Oceans Canada</i> <br>
+    <li>Developing quantitative tools to account for changing demographics and meet Fisheries Act provisions in Canadian-origin Yukon River Chinook Salmon, <i>for Fisheries and Oceans Canada</i> <br>
   	</li>
-    <li>Sensitivity analysis of the 2021 WPTT Indian Ocean yellowfin tuna stock assessment within Stock Synthesis 3 <i>for Europêche Tuna Group</i> </li>
+    <li>Sensitivity analysis of the 2021 WPTT Indian Ocean Yellowfin Tuna stock assessment within Stock Synthesis 3, <i>for Europêche Tuna Group</i> </li>
 </td>
   </tr>
   <tr valign=top>
@@ -97,15 +97,22 @@ Quantitative scientist with 10+ years of professional experience in data analysi
   <tr valign=top>
     <td>2023</td>
     <td><b>Science Advisor</b>, <i>Casual</i>
-    <br>
-    Evaluated the potential impacts of grey seal predation and fishery bycatch/discards on cod mortality on the Western Scotian Shelf and Bay of Fundy.
+    <ul>
+    <li>
+    	Evaluated the potential impacts of grey seal predation and fishery bycatch/discards on cod mortality on the Western Scotian Shelf and Bay of Fundy.
+    </li>
 </td>
   </tr>
   <tr valign=top>
-    <td>2019-2022</td>
+    <td>2018-2022</td>
     <td><b>Biologist</b>, <i>Casual</i>
-    <br>
-    Developed multispecies model of seal/cod/herring interactions in the southern Gulf of St. Lawrence in TMB and R and evaluated seal reduction scenarios.
+    <ul>
+    <li>
+    	Developed multispecies model of seal/cod/herring interactions in the southern Gulf of St. Lawrence in TMB and R and evaluated seal reduction scenarios.<br>
+  	</li>
+    <li>
+    	Developed integrated grey seal population model <a href="https://waves-vagues.dfo-mpo.gc.ca/library-bibliotheque/41063648.pdf">currently used</a> to assess the Canadian grey seal population.
+    </li>    
   </td>
   </tr>
 </tbody>
@@ -123,8 +130,10 @@ Quantitative scientist with 10+ years of professional experience in data analysi
   <tr valign=top>
     <td>2015</td>
     <td><b>Model Programmer</b>
-<br>
+  <ul>
+  <li>
     Processed camera data of fishing effort on BC lakes.
+  </li>
 </td>
   </tr>
 </tbody>
@@ -142,8 +151,10 @@ Quantitative scientist with 10+ years of professional experience in data analysi
   <tr valign=top>
     <td>2010-2011</td>
     <td><b>Research Assistant in Fisheries Population Dynamics</b>
-    <br>
-    Performed population dynamics modelling of BC Sablefish and other species in R.
+    <ul>
+    <li>
+    	Performed population dynamics modelling of BC Sablefish and other species in R.
+    </li>
 </td>
   </tr>
 </tbody>
@@ -177,7 +188,8 @@ Quantitative scientist with 10+ years of professional experience in data analysi
     <td>2012-2013</td>
     <td><b>Pacific Salmon Commission</b>, <i>subcontracted by S.C. Fisheries</i>
     <br>
-    Project title: Genetic and environmental management model for BC and Washington chum salmon fisheries
+    Project title: Genetic and environmental management model for BC and Washington chum salmon fisheries.
+    <a href="https://www.psc.org/wpfd_file/s13-i10a-development-of-chum-genetic-and-environmental-chumgem-model-phase-i-cox-component/">(link)</a>
 		</td>
 	</tr>
 </tbody>
