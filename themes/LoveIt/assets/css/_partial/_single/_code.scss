@@ -7,6 +7,7 @@ code {
   font-size: var(--code-font-size);
   font-family: var(--code-font-family);
   color: $code-color;
+  line-height: 1.4em;
 
   [theme=dark] & {
     color: $code-color-dark;
@@ -40,7 +41,6 @@ code, pre, .highlight table, .highlight tr, .highlight td {
 .highlight {
   font-family: var(--code-font-family);
   font-size: var(--code-font-size);
-  line-height: 1.4em;
   margin: .5rem 0;
 
   .table-wrapper {
@@ -67,6 +67,7 @@ code, pre, .highlight table, .highlight tr, .highlight td {
       align-items: center;
       box-sizing: border-box;
       width: 100%;
+      line-height: 2em;
       font-family: var(--global-font-family);
       font-weight: bold;
       color: $code-info-color;
